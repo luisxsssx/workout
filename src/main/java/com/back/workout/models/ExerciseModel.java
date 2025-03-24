@@ -1,17 +1,20 @@
 package com.back.workout.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExerciseModel {
-    @Id
-    public Integer routine_id;
+    public Integer id_exercise;
     public String name;
+    public TrackingType trackingType;
+    public String description;
+    public String equipment;
+    public LocalDateTime created_at;
+    public LocalDateTime updated_at;
 }
