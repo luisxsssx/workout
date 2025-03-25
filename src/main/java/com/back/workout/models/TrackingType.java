@@ -13,4 +13,11 @@ public enum TrackingType {
         this.value = value;
     }
 
+    public static TrackingType fromString(String value) {
+        if (value == null) {
+            return null;
+        }
+        return TrackingType.valueOf(value.toUpperCase());
+    }
+
 }

@@ -1,8 +1,11 @@
 package com.back.workout.services;
 
 import com.back.workout.models.ExerciseModel;
+import com.back.workout.models.TrackingType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ExerciseService {
@@ -12,6 +15,7 @@ public class ExerciseService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    // Create exercise
     public void createExercise(ExerciseModel exerciseModel) {
         String sql = "CALL sp_create_exercise(?, ?, ?, ?)";
 
@@ -21,9 +25,28 @@ public class ExerciseService {
 
         jdbcTemplate.update(sql,
                 exerciseModel.getName(),
-                exerciseModel.getTrackingType().getValue(),
+                exerciseModel.getTracking_type().getValue(),
                 exerciseModel.getDescription(),
                 exerciseModel.getEquipment()
         );
+    }
+
+    // Get exercises
+    public List<ExerciseModel> listExercises() {
+        String sql = "SELECT * FROM get_exercises()";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            String trackingTypeStr = rs.getString("p_tracking_type");
+            TrackingType trackingType = trackingTypeStr != null ? TrackingType.fromString(trackingTypeStr) : null;
+
+            return new ExerciseModel(
+                    rs.getInt("p_id_exercise"),
+                    rs.getString("p_name"),
+                    trackingType,
+                    rs.getString("p_description"),
+                    rs.getString("p_equipment"),
+                    rs.getTimestamp("p_created_at").toLocalDateTime(),
+                    rs.getTimestamp("p_updated_at").toLocalDateTime()
+            );
+        });
     }
 }
