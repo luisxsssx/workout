@@ -10,8 +10,4 @@ import lombok.NoArgsConstructor;
 public class RoutineExercise {
     public Integer routine_id;
     public Integer exercise_id;
-    public Integer sets;
-    public Integer reps;
-    public Integer duration;
-    public Integer rest_interval;
 }

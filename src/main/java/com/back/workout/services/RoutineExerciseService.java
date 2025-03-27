@@ -16,14 +16,10 @@ public class RoutineExerciseService {
 
     // Relate routine with exercises
     public void relateRoutine(RoutineExercise rout) {
-        String sql = "CALL sp_routine_exercise(?, ?, ?, ?, ?, ?)";
+        String sql = "CALL sp_routine_exercise(?, ?)";
         jdbcTemplate.update(sql,
                 rout.getRoutine_id(),
-                rout.getExercise_id(),
-                rout.getSets(),
-                rout.getReps(),
-                rout.getDuration(),
-                rout.getRest_interval()
+                rout.getExercise_id()
         );
     }
 }
