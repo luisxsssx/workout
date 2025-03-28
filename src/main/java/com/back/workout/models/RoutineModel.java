@@ -12,6 +12,7 @@ import java.time.LocalDate;
 public class RoutineModel {
     public Integer id_routine;
     public String name;
+    public String description;
     public LocalDate created_at;
     public LocalDate updated_at;
 }

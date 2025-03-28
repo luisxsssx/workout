@@ -3,6 +3,7 @@ package com.back.workout.controller;
 import com.back.workout.models.ExerciseModel;
 import com.back.workout.services.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,5 +27,11 @@ public class ExerciseController {
     @GetMapping("/all")
     public List<ExerciseModel> getExercises() {
         return exerciseService.listExercises();
+    }
+
+    @PostMapping("/id")
+    public ResponseEntity<Object> getExercisesById(@RequestBody ExerciseModel exerciseModel) throws Exception {
+        Object result = exerciseService.getExercisesById(exerciseModel.getId_exercise());
+        return ResponseEntity.ok(result);
     }
 }

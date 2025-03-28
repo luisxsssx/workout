@@ -2,6 +2,9 @@ package com.back.workout.services;
 
 import com.back.workout.models.ExerciseModel;
 import com.back.workout.models.TrackingType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -11,8 +14,23 @@ import java.util.List;
 public class ExerciseService {
     private final JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     public ExerciseService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    // Get exercises with id
+    public String getExercisesById(Integer id_exercise) throws Exception {
+        String query = "SELECT get_exercise_by_id(?)";
+        try {
+            return jdbcTemplate.queryForObject(query, new Object[]{id_exercise}, String.class);
+        } catch (EmptyResultDataAccessException e) {
+            throw new IllegalArgumentException("No exercise found with id: " + id_exercise);
+        } catch (Exception e) {
+            throw new Exception("Error retrieving exercise with id: " + id_exercise, e);
+        }
     }
 
     // Create exercise

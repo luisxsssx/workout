@@ -18,7 +18,7 @@ public class RoutineService {
 
     // Create routine
     public void createRoutine(RoutineModel routineModel) {
-        String sql = "CALL sp_create_routine(?, ?, ?)";
+        String sql = "CALL sp_create_routine(?, ?, ?, ?)";
 
         if (routineModel == null || routineModel.getName() == null || routineModel.getName().trim().isEmpty()) {
             throw new IllegalArgumentException("The routine name cannot be empty.");
@@ -26,7 +26,7 @@ public class RoutineService {
 
         routineModel.setCreated_at(LocalDate.now());
         routineModel.setUpdated_at(LocalDate.now());
-        jdbcTemplate.update(sql, routineModel.getName(), routineModel.getCreated_at(), routineModel.getUpdated_at());
+        jdbcTemplate.update(sql, routineModel.getName(), routineModel.getDescription(), routineModel.getCreated_at(), routineModel.getUpdated_at());
     }
 
     // Get routines
@@ -36,6 +36,7 @@ public class RoutineService {
                 new RoutineModel(
                         rs.getInt("p_id_routine"),
                         rs.getString("p_name"),
+                        rs.getString("p_description"),
                         rs.getDate("p_created_at").toLocalDate(),
                         rs.getDate("p_updated_at").toLocalDate()
                 )
