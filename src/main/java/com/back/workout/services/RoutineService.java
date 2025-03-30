@@ -43,4 +43,10 @@ public class RoutineService {
         );
     }
 
+    // Routines by id
+    public String listRoutinesById(Integer id_routine) {
+        String sql = "SELECT get_routine_exercises(?)";
+        return jdbcTemplate.queryForObject(sql, new Object[]{id_routine}, String.class);
+    }
+
 }
