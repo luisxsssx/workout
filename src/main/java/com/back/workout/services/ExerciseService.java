@@ -5,6 +5,7 @@ import com.back.workout.models.TrackingType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -74,5 +75,11 @@ public class ExerciseService {
                     rs.getTimestamp("p_updated_at").toLocalDateTime()
             );
         });
+    }
+
+    // Delete
+    public void deleteExercise(ExerciseModel exerciseModel) {
+        String sql = "CALL sp_delete_exercise(?)";
+        jdbcTemplate.update(sql, exerciseModel.getId_exercise());
     }
 }

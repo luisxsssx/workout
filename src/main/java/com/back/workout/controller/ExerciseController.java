@@ -24,6 +24,12 @@ public class ExerciseController {
         return "Exercise Created Successfully";
     }
 
+    @DeleteMapping("/kill")
+    public String deleteExercise(@RequestBody ExerciseModel exerciseModel) {
+        exerciseService.deleteExercise(exerciseModel);
+        return "Exercise removed Successfully";
+    }
+
     @GetMapping("/all")
     public List<ExerciseModel> getExercises() {
         return exerciseService.listExercises();

@@ -34,6 +34,12 @@ public class RoutineController {
         String result = routineService.listRoutinesById(routineModel.getId_routine());
         return ResponseEntity.ok(result);
     }
+
+    @DeleteMapping("/kill")
+    public String deleteExercise(@RequestBody RoutineModel routineModel) {
+        routineService.deleteRoutine(routineModel);
+        return "Routine removed Successfully";
+    }
 }
 
 
