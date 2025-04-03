@@ -14,7 +14,7 @@ public class RoutineExerciseService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // Relate routine with exercises
+    // This get is for routines that have exercises, that is, that have relationships
     public void relateRoutine(RoutineExercise rout) {
         String sql = "CALL sp_routine_exercise(?, ?)";
         jdbcTemplate.update(sql,
