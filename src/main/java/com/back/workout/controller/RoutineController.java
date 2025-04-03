@@ -29,8 +29,17 @@ public class RoutineController {
         return routineService.listRoutines();
     }
 
-    @PostMapping("/id")
-    public ResponseEntity<Object> getRoutineId (@RequestBody RoutineModel routineModel) {
+     @PostMapping("/get")
+     public ResponseEntity<List<RoutineModel>> getRoutine(@RequestBody RoutineModel routineRequest) {
+         List<RoutineModel> routines = routineService.getRoutineById(routineRequest.getId_routine());
+         if (routines.isEmpty()) {
+             return ResponseEntity.noContent().build();
+         }
+         return ResponseEntity.ok(routines);
+     }
+
+    @PostMapping("/detail/id")
+    public ResponseEntity<Object> getRoutinesId (@RequestBody RoutineModel routineModel) {
         String result = routineService.listRoutinesById(routineModel.getId_routine());
         return ResponseEntity.ok(result);
     }

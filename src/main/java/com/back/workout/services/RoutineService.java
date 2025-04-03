@@ -4,6 +4,8 @@ import com.back.workout.models.RoutineModel;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -43,7 +45,28 @@ public class RoutineService {
         );
     }
 
-    // Routines by id
+    public List<RoutineModel> getRoutineById(int id_routine) {
+        String sql = "SELECT * FROM get_routine(?)";
+
+        return jdbcTemplate.query(
+                sql,
+                new Object[]{id_routine},
+                (rs, rowNum) -> mapRowToRoutine(rs)
+        );
+    }
+
+    private RoutineModel mapRowToRoutine(ResultSet rs) throws SQLException {
+        return new RoutineModel(
+                rs.getInt("out_id_routine"),
+                rs.getString("out_name"),
+                rs.getString("out_description"),
+                rs.getDate("out_created_at").toLocalDate(),
+                rs.getDate("out_updated_at").toLocalDate()
+        );
+    }
+
+
+    // Routines by id with relation
     public String listRoutinesById(Integer id_routine) {
         String sql = "SELECT get_routine_exercises(?)";
         return jdbcTemplate.queryForObject(sql, new Object[]{id_routine}, String.class);
