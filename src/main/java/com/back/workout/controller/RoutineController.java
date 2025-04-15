@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/routine")
@@ -19,9 +20,13 @@ public class RoutineController {
     }
 
     @PostMapping("/create")
-    public String createRoutine(@RequestBody RoutineModel routineModel) {
-        routineService.createRoutine(routineModel);
-        return "Routine Created Successfully";
+    public ResponseEntity<Integer> createRoutine(@RequestBody Map<String, Object> request) {
+        String name = (String) request.get("name");
+        String description = (String) request.get("description");
+        Integer[] exerciseIds = ((java.util.List<Integer>) request.get("exerciseIds")).toArray(new Integer[0]);
+
+        Integer routineId = routineService.createRoutineWithExercises(name, description, exerciseIds);
+        return ResponseEntity.ok(routineId);
     }
 
     @GetMapping("/all")
@@ -45,10 +50,14 @@ public class RoutineController {
     }
 
     @DeleteMapping("/kill")
-    public String deleteExercise(@RequestBody RoutineModel routineModel) {
-        routineService.deleteRoutine(routineModel);
-        return "Routine removed Successfully";
+    public ResponseEntity<?> deleteExercise(@RequestBody RoutineModel routineModel) {
+        try {
+            RoutineModel routineModel1 = new RoutineModel();
+            routineModel1.setId_routine(routineModel.getId_routine());
+            routineService.deleteRoutine(routineModel);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 }
-
-

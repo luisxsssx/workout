@@ -31,6 +31,15 @@ public class RoutineService {
         jdbcTemplate.update(sql, routineModel.getName(), routineModel.getDescription(), routineModel.getCreated_at(), routineModel.getUpdated_at());
     }
 
+    public Integer createRoutineWithExercises(String name, String description, Integer[] exerciseIds) {
+        String sql = "SELECT create_routine_with_exercises(?, ?, ?)";
+        return jdbcTemplate.queryForObject(
+                sql,
+                new Object[]{name, description, exerciseIds},
+                Integer.class
+        );
+    }
+
     // Get routines
     public List<RoutineModel> listRoutines() {
         String sql = "SELECT * FROM get_routines()";
@@ -65,7 +74,6 @@ public class RoutineService {
         );
     }
 
-
     // Routines by id with relation
     public String listRoutinesById(Integer id_routine) {
         String sql = "SELECT get_routine_exercises(?)";
@@ -73,8 +81,13 @@ public class RoutineService {
     }
 
     // Delete routine
-    public void deleteRoutine(RoutineModel routineModel) {
+    /*public void deleteRoutine(RoutineModel routineModel) {
         String sql = "CALL sp_delete_routine(?)";
+        jdbcTemplate.update(sql, routineModel.getId_routine());
+    } */
+
+    public void deleteRoutine(RoutineModel routineModel) {
+        String sql = "CALL delete_routine(?)";
         jdbcTemplate.update(sql, routineModel.getId_routine());
     }
 }

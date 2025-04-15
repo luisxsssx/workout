@@ -1,9 +1,11 @@
 package com.back.workout.controller;
 
 import com.back.workout.models.ExerciseModel;
+import com.back.workout.models.ExerciseModelName;
 import com.back.workout.services.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,14 +27,25 @@ public class ExerciseController {
     }
 
     @DeleteMapping("/kill")
-    public String deleteExercise(@RequestBody ExerciseModel exerciseModel) {
-        exerciseService.deleteExercise(exerciseModel);
-        return "Exercise removed Successfully";
+    public ResponseEntity<Void> deleteExercise(@RequestBody ExerciseModel exerciseModel) {
+        try {
+            ExerciseModel exerciseModel1 = new ExerciseModel();
+            exerciseModel1.setId_exercise(exerciseModel.getId_exercise());
+            exerciseService.deleteExercise(exerciseModel);
+            return  ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @GetMapping("/all")
     public List<ExerciseModel> getExercises() {
         return exerciseService.listExercises();
+    }
+
+    @GetMapping("/names")
+    public List<ExerciseModelName> getExercisesName() {
+        return exerciseService.listExercisesName();
     }
 
     @PostMapping("/id")

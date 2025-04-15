@@ -1,6 +1,7 @@
 package com.back.workout.services;
 
 import com.back.workout.models.ExerciseModel;
+import com.back.workout.models.ExerciseModelName;
 import com.back.workout.models.TrackingType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,18 @@ public class ExerciseService {
                 exerciseModel.getDuration(),
                 exerciseModel.getRest_interval()
         );
+    }
+
+    // Get exercises name
+    public List<ExerciseModelName> listExercisesName() {
+        String sql = "SELECT * FROM get_exercises_name()";
+
+        return jdbcTemplate.query(sql , (rs, rowNUm) -> {
+            return new ExerciseModelName(
+                    rs.getInt("p_id_exercise"),
+                    rs.getString("p_name")
+            );
+        });
     }
 
     // Get exercises
