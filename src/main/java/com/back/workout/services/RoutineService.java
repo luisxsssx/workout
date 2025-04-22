@@ -80,12 +80,6 @@ public class RoutineService {
         return jdbcTemplate.queryForObject(sql, new Object[]{id_routine}, String.class);
     }
 
-    // Delete routine
-    /*public void deleteRoutine(RoutineModel routineModel) {
-        String sql = "CALL sp_delete_routine(?)";
-        jdbcTemplate.update(sql, routineModel.getId_routine());
-    } */
-
     public void deleteRoutine(RoutineModel routineModel) {
         String sql = "CALL delete_routine(?)";
         jdbcTemplate.update(sql, routineModel.getId_routine());

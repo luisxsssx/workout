@@ -5,7 +5,6 @@ import com.back.workout.models.ExerciseModelName;
 import com.back.workout.services.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
