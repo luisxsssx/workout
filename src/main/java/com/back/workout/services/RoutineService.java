@@ -31,13 +31,17 @@ public class RoutineService {
         jdbcTemplate.update(sql, routineModel.getName(), routineModel.getDescription(), routineModel.getCreated_at(), routineModel.getUpdated_at());
     }
 
-    public Integer createRoutineWithExercises(String name, String description, Integer[] exerciseIds) {
-        String sql = "SELECT create_routine_with_exercises(?, ?, ?)";
-        return jdbcTemplate.queryForObject(
-                sql,
-                new Object[]{name, description, exerciseIds},
-                Integer.class
-        );
+    public Integer createRoutineWithExercises(Long user_id, String name, String description, Integer[] exerciseIds) {
+        try {
+            String sql = "SELECT create_routine_with_exercises(?, ?, ?, ?)";
+            return jdbcTemplate.queryForObject(
+                    sql,
+                    new Object[]{user_id, name, description, exerciseIds},
+                    Integer.class
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Error creating routine: " + e.getMessage());
+        }
     }
 
     // Get routines

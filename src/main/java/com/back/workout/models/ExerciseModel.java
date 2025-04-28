@@ -20,10 +20,11 @@ public class ExerciseModel {
     public Integer reps;
     public Integer duration;
     public Integer rest_interval;
+    public Integer user_id;
     public LocalDateTime created_at;
     public LocalDateTime updated_at;
 
-    public ExerciseModel(int id_exercise, String name, String tracking_type, String description, String equipment, Integer sets, Integer reps, Integer duration, Integer rest_interval, LocalDate created_at, LocalDate updated_at) {
+    public ExerciseModel(int id_exercise, String name, String tracking_type, String description, String equipment, Integer sets, Integer reps, Integer duration, Integer rest_interval, LocalDate created_at, LocalDate updated_at, int user_id) {
         this.id_exercise = id_exercise;
         this.name = name;
         this.tracking_type = TrackingType.valueOf(tracking_type);
@@ -33,6 +34,7 @@ public class ExerciseModel {
         this.reps = reps;
         this.duration = duration;
         this.rest_interval = rest_interval;
+        this.user_id = user_id;
         this.created_at = LocalDateTime.from(created_at);
         this.updated_at = updated_at.atStartOfDay();
     }

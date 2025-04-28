@@ -23,9 +23,10 @@ public class RoutineController {
     public ResponseEntity<Integer> createRoutine(@RequestBody Map<String, Object> request) {
         String name = (String) request.get("name");
         String description = (String) request.get("description");
+        Integer user_id = (Integer) request.get("user_id");
         Integer[] exerciseIds = ((java.util.List<Integer>) request.get("exerciseIds")).toArray(new Integer[0]);
 
-        Integer routineId = routineService.createRoutineWithExercises(name, description, exerciseIds);
+        Integer routineId = routineService.createRoutineWithExercises(Long.valueOf(user_id), name, description, exerciseIds);
         return ResponseEntity.ok(routineId);
     }
 
