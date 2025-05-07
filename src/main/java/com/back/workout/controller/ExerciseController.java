@@ -52,4 +52,12 @@ public class ExerciseController {
         Object result = exerciseService.getExercisesById(exerciseModel.getId_exercise());
         return ResponseEntity.ok(result);
     }
+
+    @PostMapping("/user/id")
+    public ResponseEntity<Object> getExercisesByUserId(@RequestBody ExerciseModel exerciseModel) throws Exception {
+        Object result = exerciseService.getExercisesByUserId(exerciseModel.getUser_id());
+        return ResponseEntity.ok(result);
+    }
+
+
 }

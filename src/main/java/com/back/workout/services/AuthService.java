@@ -3,6 +3,7 @@ package com.back.workout.services;
 import com.back.workout.jwt.JwtUtil;
 import com.back.workout.models.LoginRequest;
 import com.back.workout.models.LoginResponse;
+import com.back.workout.models.UserModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -47,6 +48,7 @@ public class AuthService {
 
             String storedUsername = (String) result.get("username");
             String storedPassword = (String) result.get("password");
+            Integer user_id = (Integer) result.get("id");
 
             if (storedUsername == null || storedPassword == null) {
                 throw new RuntimeException("Invalid credentials: incomplete data");
@@ -57,7 +59,7 @@ public class AuthService {
             }
 
             Map<String, Object> customClaims = new HashMap<>();
-            String token = jwtUtil.generateToken(storedUsername, customClaims);
+            String token = jwtUtil.generateToken(storedUsername, user_id,customClaims);
 
             System.out.println("Generated token: " + token);
 

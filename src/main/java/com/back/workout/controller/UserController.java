@@ -6,6 +6,7 @@ import com.back.workout.models.UserModel;
 import com.back.workout.models.UserRequestDto;
 import com.back.workout.services.AuthService;
 import com.back.workout.services.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,9 +51,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpSession session) {
         try {
             LoginResponse response = authService.login(loginRequest);
+            session.setAttribute("username", response.getUsername());
+            session.setAttribute("userData", response.getUserData());
+            session.setMaxInactiveInterval(30 * 60);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: " + e.getMessage());

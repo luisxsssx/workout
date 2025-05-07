@@ -21,8 +21,10 @@ public class JwtUtil {
     private long expiration;
 
     //Generate token
-    public String generateToken(String username, Map<String, Object> customClaims) {
+    public String generateToken(String username, Integer id, Map<String, Object> customClaims) {
         Map<String, Object> claims = new HashMap<>(customClaims);
+        claims.put("user_id", id);
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(username)
@@ -48,5 +50,21 @@ public class JwtUtil {
     // Get username from token
     public String getUsernameFromToken(String token) {
         return validateToken(token).getSubject();
+    }
+
+    public io.jsonwebtoken.Claims getClaimsFromToken(String token) {
+        try {
+            return Jwts.parser()
+                    .setSigningKey(Keys.hmacShaKeyFor(secret.getBytes()))
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid JWT token");
+        }
+    }
+
+    public Integer extractUserId(String token) {
+        return getClaimsFromToken(token).get("user_id", Integer.class);
     }
 }

@@ -22,6 +22,19 @@ public class ExerciseService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    // Get exercises by user id
+    public String getExercisesByUserId(Integer user_id) throws Exception {
+        String query = "SELECT get_exercise_by_user_id(?)";
+
+        try {
+            return jdbcTemplate.queryForObject(query, new Object[]{user_id}, String.class);
+        } catch (EmptyResultDataAccessException e) {
+            throw new IllegalArgumentException("No exercise found with id: " + user_id);
+        } catch (Exception e) {
+            throw new Exception("Error retrieving exercise with id: " + user_id, e);
+        }
+    }
+
     // Get exercises with id
     public String getExercisesById(Integer id_exercise) throws Exception {
         String query = "SELECT get_exercise_by_id(?)";
