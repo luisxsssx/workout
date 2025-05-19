@@ -15,4 +15,6 @@ public class RoutineModel {
     public String description;
     public LocalDate created_at;
     public LocalDate updated_at;
+    public Integer user_id;
+    public String status;
 }

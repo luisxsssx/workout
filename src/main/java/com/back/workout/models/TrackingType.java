@@ -19,5 +19,4 @@ public enum TrackingType {
         }
         return TrackingType.valueOf(value.toUpperCase());
     }
-
 }

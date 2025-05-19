@@ -59,5 +59,4 @@ public class ExerciseController {
         return ResponseEntity.ok(result);
     }
 
-
 }

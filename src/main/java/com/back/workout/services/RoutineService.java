@@ -1,6 +1,7 @@
 package com.back.workout.services;
 
 import com.back.workout.models.RoutineModel;
+import com.back.workout.models.StatusUpdateResult;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -53,8 +54,20 @@ public class RoutineService {
                         rs.getString("p_name"),
                         rs.getString("p_description"),
                         rs.getDate("p_created_at").toLocalDate(),
-                        rs.getDate("p_updated_at").toLocalDate()
+                        rs.getDate("p_updated_at").toLocalDate(),
+                        rs.getInt("p_user_id"),
+                        rs.getString("p_status")
                 )
+        );
+    }
+
+    // Get a user's routines by user_id
+    public List<RoutineModel> getRoutineByUserId(int user_id) {
+        String sql = "SELECT * FROM get_routines_by_user(?)";
+        return jdbcTemplate.query(
+                sql,
+                new Object[]{user_id},
+                (rs, rowNum) -> mapRowToRoutine(rs)
         );
     }
 
@@ -70,11 +83,13 @@ public class RoutineService {
 
     private RoutineModel mapRowToRoutine(ResultSet rs) throws SQLException {
         return new RoutineModel(
-                rs.getInt("out_id_routine"),
-                rs.getString("out_name"),
-                rs.getString("out_description"),
-                rs.getDate("out_created_at").toLocalDate(),
-                rs.getDate("out_updated_at").toLocalDate()
+                rs.getInt("p_id_routine"),
+                rs.getString("p_name"),
+                rs.getString("p_description"),
+                rs.getDate("p_created_at").toLocalDate(),
+                rs.getDate("p_updated_at").toLocalDate(),
+                rs.getInt("p_user_id"),
+                rs.getString("p_status")
         );
     }
 
@@ -88,4 +103,20 @@ public class RoutineService {
         String sql = "CALL delete_routine(?)";
         jdbcTemplate.update(sql, routineModel.getId_routine());
     }
+
+    // Execute routine
+    public Integer executeRoutine(Integer routine_id, Integer exercise_id, Integer user_id) {
+        String query = "CALL sp_start_routine(?, ?, ?)";
+        return jdbcTemplate.update(query, routine_id, exercise_id, user_id);
+    }
+
+    // Change routine status
+    public StatusUpdateResult changeStatus(String table, Integer[] ids, String status) {
+        String query = "SELECT * FROM update_status(?, ?, ?)";
+        return jdbcTemplate.queryForObject(query, new Object[]{table, ids, status}, (rs, rowNum) -> {
+            StatusUpdateResult result = new StatusUpdateResult();
+            result.setMessage(rs.getString("message"));
+            result.setRowsAffected(rs.getInt("rows_affected"));
+            return result;
+        });    }
 }
