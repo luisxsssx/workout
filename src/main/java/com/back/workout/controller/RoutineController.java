@@ -14,8 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/routine")
+@RequestMapping("/routines")
 public class RoutineController {
+
     private final RoutineService routineService;
 
     @Autowired
@@ -23,61 +24,58 @@ public class RoutineController {
         this.routineService = routineService;
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<Integer> createRoutine(@RequestBody Map<String, Object> request) {
         String name = (String) request.get("name");
         String description = (String) request.get("description");
-        Integer user_id = (Integer) request.get("user_id");
-        Integer[] exerciseIds = ((java.util.List<Integer>) request.get("exerciseIds")).toArray(new Integer[0]);
+        Integer userId = (Integer) request.get("user_id");
+        Integer[] exerciseIds = ((List<Integer>) request.get("exerciseIds")).toArray(new Integer[0]);
 
-        Integer routineId = routineService.createRoutineWithExercises(Long.valueOf(user_id), name, description, exerciseIds);
+        Integer routineId = routineService.createRoutineWithExercises(Long.valueOf(userId), name, description, exerciseIds);
         return ResponseEntity.ok(routineId);
     }
 
-    @GetMapping("/all")
-    public List<RoutineModel> getRoutines() {
+    @GetMapping
+    public List<RoutineModel> getAllRoutines() {
         return routineService.listRoutines();
     }
 
-     @PostMapping("/get")
-     public ResponseEntity<List<RoutineModel>> getRoutine(@RequestBody RoutineModel routineRequest) {
-         List<RoutineModel> routines = routineService.getRoutineById(routineRequest.getId_routine());
-         if (routines.isEmpty()) {
-             return ResponseEntity.noContent().build();
-         }
-         return ResponseEntity.ok(routines);
-     }
-
-     @PostMapping("/getu")
-     public ResponseEntity<List<RoutineModel>> getRoutinesByUserId(@RequestBody RoutineModel routineModel) {
-        List<RoutineModel> routine = routineService.getRoutineByUserId(routineModel.getUser_id());
-        if(routine.isEmpty()) {
+    @PostMapping("/by-id")
+    public ResponseEntity<List<RoutineModel>> getRoutineById(@RequestBody RoutineModel routineRequest) {
+        List<RoutineModel> routines = routineService.getRoutineById(routineRequest.getId_routine());
+        if (routines.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(routine);
-     }
+        return ResponseEntity.ok(routines);
+    }
 
-    @PostMapping("/detail/id")
-    public ResponseEntity<Object> getRoutinesId (@RequestBody RoutineModel routineModel) {
+    @PostMapping("/by-user")
+    public ResponseEntity<List<RoutineModel>> getRoutinesByUserId(@RequestBody RoutineModel routineModel) {
+        List<RoutineModel> routines = routineService.getRoutineByUserId(routineModel.getUser_id());
+        if (routines.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(routines);
+    }
+
+    @PostMapping("/summary")
+    public ResponseEntity<Object> getRoutineSummaryById(@RequestBody RoutineModel routineModel) {
         String result = routineService.listRoutinesById(routineModel.getId_routine());
         return ResponseEntity.ok(result);
     }
 
-    @DeleteMapping("/kill")
-    public ResponseEntity<?> deleteExercise(@RequestBody RoutineModel routineModel) {
+    @DeleteMapping("/by-id")
+    public ResponseEntity<?> deleteRoutine(@RequestBody RoutineModel routineModel) {
         try {
-            RoutineModel routineModel1 = new RoutineModel();
-            routineModel1.setId_routine(routineModel.getId_routine());
             routineService.deleteRoutine(routineModel);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().body("Error deleting routine: " + e.getMessage());
         }
     }
 
-    // Change routine status
-    @PostMapping("/change")
-    public ResponseEntity<StatusUpdateResult> changeStatus(@RequestBody StatusUpdateRequest request) {
+    @PostMapping("/status/update")
+    public ResponseEntity<StatusUpdateResult> updateRoutineStatus(@RequestBody StatusUpdateRequest request) {
         try {
             StatusUpdateResult result = routineService.changeStatus(
                     request.getTable(),
@@ -90,7 +88,6 @@ public class RoutineController {
         }
     }
 
-    // Start routine
     @PostMapping("/start")
     public ResponseEntity<String> startRoutine(@RequestBody StartRoutineRequest request) {
         try {
@@ -105,5 +102,4 @@ public class RoutineController {
                     .body("Error starting routine: " + e.getMessage());
         }
     }
-
 }

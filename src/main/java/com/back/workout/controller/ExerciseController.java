@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/exercises")
 public class ExerciseController {
+
     private final ExerciseService exerciseService;
 
     @Autowired
@@ -19,44 +20,43 @@ public class ExerciseController {
         this.exerciseService = exerciseService;
     }
 
-    @PostMapping("/add")
+    @PostMapping("/create")
     public String createExercise(@RequestBody ExerciseModel exerciseModel) {
         exerciseService.createExercise(exerciseModel);
-        return "Exercise Created Successfully";
+        return "Exercise created successfully";
     }
 
-    @DeleteMapping("/kill")
+    @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteExercise(@RequestBody ExerciseModel exerciseModel) {
         try {
-            ExerciseModel exerciseModel1 = new ExerciseModel();
-            exerciseModel1.setId_exercise(exerciseModel.getId_exercise());
-            exerciseService.deleteExercise(exerciseModel);
-            return  ResponseEntity.noContent().build();
+            ExerciseModel exercise = new ExerciseModel();
+            exercise.setId_exercise(exerciseModel.getId_exercise());
+            exerciseService.deleteExercise(exercise);
+            return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().build();
         }
     }
 
     @GetMapping("/all")
-    public List<ExerciseModel> getExercises() {
+    public List<ExerciseModel> getAllExercises() {
         return exerciseService.listExercises();
     }
 
     @GetMapping("/names")
-    public List<ExerciseModelName> getExercisesName() {
+    public List<ExerciseModelName> getExerciseNames() {
         return exerciseService.listExercisesName();
     }
 
-    @PostMapping("/id")
-    public ResponseEntity<Object> getExercisesById(@RequestBody ExerciseModel exerciseModel) throws Exception {
+    @PostMapping("/get-by-id")
+    public ResponseEntity<Object> getExerciseById(@RequestBody ExerciseModel exerciseModel) throws Exception {
         Object result = exerciseService.getExercisesById(exerciseModel.getId_exercise());
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/user/id")
+    @PostMapping("/get-by-user")
     public ResponseEntity<Object> getExercisesByUserId(@RequestBody ExerciseModel exerciseModel) throws Exception {
         Object result = exerciseService.getExercisesByUserId(exerciseModel.getUser_id());
         return ResponseEntity.ok(result);
     }
-
 }
