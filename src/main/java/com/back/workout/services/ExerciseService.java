@@ -109,4 +109,17 @@ public class ExerciseService {
         String sql = "CALL sp_delete_exercise(?)";
         jdbcTemplate.update(sql, exerciseModel.getId_exercise());
     }
+
+    // Adding exercises to a routine
+    public int addExercisesToRoutine(Integer routineId, List<Integer> exerciseIds) {
+        String sql = "CALL sp_add_exercises_in_routine(?, ?)";
+        Integer[] exerciseArray = exerciseIds.toArray(new Integer[0]);
+        return jdbcTemplate.update(sql, new Object[] { exerciseArray, routineId });
+    }
+
+    // Eliminate exercises from a routine
+    public int deleteExerciseRoutine(Integer exercise_id, Integer routine_id) {
+        String sql = "CALL sp_delete_exercise_routine(?, ?)";
+        return jdbcTemplate.update(sql, exercise_id, routine_id);
+    }
 }

@@ -94,10 +94,11 @@ public class RoutineService {
     }
 
     // Routines by id with relation
-    public String listRoutinesById(Integer id_routine) {
-        String sql = "SELECT get_routine_exercises(?)";
-        return jdbcTemplate.queryForObject(sql, new Object[]{id_routine}, String.class);
+    public String listRoutinesById(Integer id_routine, Integer user_id) {
+        String sql = "SELECT get_routine_exercises(?, ?)";
+        return jdbcTemplate.queryForObject(sql, String.class, id_routine, user_id);
     }
+
 
     public void deleteRoutine(RoutineModel routineModel) {
         String sql = "CALL delete_routine(?)";

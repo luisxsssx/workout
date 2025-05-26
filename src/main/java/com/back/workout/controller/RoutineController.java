@@ -58,9 +58,13 @@ public class RoutineController {
         return ResponseEntity.ok(routines);
     }
 
+    // RoutineController.java
     @PostMapping("/summary")
-    public ResponseEntity<Object> getRoutineSummaryById(@RequestBody RoutineModel routineModel) {
-        String result = routineService.listRoutinesById(routineModel.getId_routine());
+    public ResponseEntity<String> getRoutineSummaryById(@RequestBody RoutineModel routineModel) {
+        String result = routineService.listRoutinesById(
+                routineModel.getId_routine(),
+                routineModel.getUser_id()
+        );
         return ResponseEntity.ok(result);
     }
 

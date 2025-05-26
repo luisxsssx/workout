@@ -1,7 +1,9 @@
 package com.back.workout.controller;
 
+import com.back.workout.models.AddExerciseRequest;
 import com.back.workout.models.ExerciseModel;
 import com.back.workout.models.ExerciseModelName;
+import com.back.workout.models.RoutineExercise;
 import com.back.workout.services.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +38,17 @@ public class ExerciseController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @DeleteMapping("/delete/routine")
+    public int deleteExercisesRoutine(@RequestBody RoutineExercise routineExercise) {
+        return exerciseService.deleteExerciseRoutine(routineExercise.getExercise_id(), routineExercise.getRoutine_id());
+    }
+
+    @PostMapping("/add-exercise")
+    public ResponseEntity<String> addExerciseOnRoutine(@RequestBody AddExerciseRequest request) {
+        exerciseService.addExercisesToRoutine(request.getRoutine_id(), request.getExerciseIds());
+        return ResponseEntity.ok("Exercises added successfully");
     }
 
     @GetMapping("/all")
